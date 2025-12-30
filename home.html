@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Home — Self Care & Checklists</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a id="top"></a>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="home.html">SelfCare</a>
+
+      <nav class="nav" aria-label="Main navigation">
+        <ul>
+          <li class="has-dropdown">
+            <a href="#">Checklists</a>
+            <ul class="dropdown">
+              <li><a href="index2.html">Self Care Checklist</a></li>
+              <li><a href="../Grouping-selectors/index.html">Cleaning Checklist</a></li>
+            </ul>
+          </li>
+          <li class="has-dropdown">
+            <a href="#">Tools</a>
+            <ul class="dropdown">
+              <li><a href="#">Daily Planner</a></li>
+              <li><a href="#">Mood Tracker</a></li>
+            </ul>
+          </li>
+          <li><a href="#about">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-main">
+
+    <div class="main-layout container">
+
+      <div class="main-column">
+        <section id="about" class="hero">
+          <div class="container">
+            <h1 class="hero-title">Self-compassion &amp; Small Wins</h1>
+            <p class="lead">Taking a moment to notice the effort—no matter how small—helps build momentum and kindness toward yourself. Using short lists or daily check-ins is a simple, effective habit for recognizing progress and staying grounded.</p>
+
+            <div class="mind-entry">
+              <label for="mind">What's on your mind right now?</label>
+              <textarea id="mind" placeholder="Write a quick check-in..." aria-label="What's on your mind"></textarea>
+            </div>
+
+          </div>
+        </section>
+
+        <section class="cards">
+          <div class="container">
+            <h2>Quick links</h2>
+            <div class="card-grid">
+              <article class="card">
+                <h3>Self Care Checklist</h3>
+                <p>Daily routines and healthy habits to support your wellbeing.</p>
+                <a class="btn" href="index2.html">Open</a>
+              </article>
+
+              <article class="card">
+                <h3>Cleaning Checklist</h3>
+                <p>Tasks to keep your space tidy — progress adds up.</p>
+                <a class="btn" href="../Grouping-selectors/index.html">Open</a>
+              </article>
+
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="sidebar-calendar" aria-label="month calendar">
+        <div class="calendar-wrap">
+          <div class="calendar-header">
+            <button id="calendar-prev" aria-label="Previous month" class="cal-nav">‹</button>
+            <div id="calendar-month" class="calendar-title">January 2026</div>
+            <button id="calendar-next" aria-label="Next month" class="cal-nav">›</button>
+          </div>
+
+          <div class="calendar-grid weeknames" aria-hidden="true">
+            <div class="day name">Sun</div>
+            <div class="day name">Mon</div>
+            <div class="day name">Tue</div>
+            <div class="day name">Wed</div>
+            <div class="day name">Thu</div>
+            <div class="day name">Fri</div>
+            <div class="day name">Sat</div>
+          </div>
+
+          <div id="calendar-grid" class="calendar-grid" role="grid" aria-label="Month calendar">
+            <!-- JS will populate month days here -->
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
+  </main>
+
+  <button id="backToTop" title="Return to top" aria-label="Return to top">↑</button>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>Made with care — remember to celebrate the small wins.</small>
+    </div>
+  </footer>
+
+  <script>
+    // Back to top button
+    const backBtn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) backBtn.classList.add('visible'); else backBtn.classList.remove('visible');
+    });
+    backBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Dropdown accessibility & outside-click close
+    (function(){
+      const roots = document.querySelectorAll('.has-dropdown');
+      roots.forEach(root => {
+        const trigger = root.querySelector('a');
+        const menu = root.querySelector('.dropdown');
+        trigger.setAttribute('role','button');
+        trigger.setAttribute('aria-expanded','false');
+        trigger.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const isOpen = root.classList.toggle('open');
+          trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+        menu.addEventListener('click', (e)=> e.stopPropagation());
+      });
+      document.addEventListener('click', () => {
+        roots.forEach(r => { r.classList.remove('open'); const t = r.querySelector('a'); if (t) t.setAttribute('aria-expanded','false'); });
+      });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { roots.forEach(r => { r.classList.remove('open'); const t = r.querySelector('a'); if (t) t.setAttribute('aria-expanded','false'); }); } });
+    })();
+
+    // Calendar rendering for 2026 (start on January)
+    (function(){
+      const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      let year = 2026, month = 0; // Jan 2026
+      const monthLabel = document.getElementById('calendar-month');
+      const prevBtn = document.getElementById('calendar-prev');
+      const nextBtn = document.getElementById('calendar-next');
+      const grid = document.getElementById('calendar-grid');
+
+      function renderMonth(y,m){
+        monthLabel.textContent = `${monthNames[m]} ${y}`;
+        grid.innerHTML = '';
+        // compute start day and number of days
+        const first = new Date(y,m,1);
+        const start = first.getDay(); // 0 = Sunday
+        const days = new Date(y,m+1,0).getDate();
+        // add placeholder empty cells before first day
+        for (let i=0;i<start;i++){ const d=document.createElement('div'); d.className='day empty'; d.setAttribute('aria-hidden','true'); grid.appendChild(d); }
+        for (let d=1; d<=days; d++){
+          const cell=document.createElement('div');
+          cell.className='day';
+          cell.setAttribute('role','gridcell');
+          cell.tabIndex = 0;
+          cell.textContent = d;
+          cell.addEventListener('click', ()=> cell.classList.toggle('selected'));
+          cell.addEventListener('keydown',(e)=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); cell.classList.toggle('selected'); } });
+          grid.appendChild(cell);
+        }
+        // update nav buttons (clamp to 2026 Jan-Dec)
+        prevBtn.disabled = (y===2026 && m===0);
+        nextBtn.disabled = (y===2026 && m===11);
+      }
+
+      prevBtn.addEventListener('click', ()=>{
+        if (year===2026 && month===0) return; // clamp
+        if (month===0){ year--; month=11; } else month--;
+        if (year<2026){ year=2026; month=0; }
+        renderMonth(year,month);
+      });
+      nextBtn.addEventListener('click', ()=>{
+        if (year===2026 && month===11) return; // clamp
+        if (month===11){ year++; month=0; } else month++;
+        if (year>2026){ year=2026; month=11; }
+        renderMonth(year,month);
+      });
+
+      // initialize to Jan 2026
+      renderMonth(year,month);
+    })();
+  </script>
+</body>
+</html>

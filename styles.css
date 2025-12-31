@@ -239,7 +239,7 @@ body {
   top: 0;
   z-index: 40;
 }
-.site-header .container{display:flex;align-items:center;gap:20px;padding:14px 18px; margin-bottom: 30px;}
+.site-header .container{display:flex;align-items:center;gap:20px;padding:14px 18px; margin-bottom: 20px;}
 .brand{font-weight:700;color:#6e1b4d;text-decoration:none;font-size:1.05rem}
 .nav ul{list-style:none;margin:0;padding:0;display:flex;gap:18px}
 .nav a{color:#333;text-decoration:none;padding:6px 8px;border-radius:4px}
@@ -263,7 +263,7 @@ body {
 #backToTop{position:fixed;right:18px;bottom:18px;border:none;background:#6e1b4d;color:#fff;padding:10px 12px;border-radius:999px;box-shadow:0 6px 12px rgba(0,0,0,0.15);cursor:pointer;opacity:0;transform:translateY(10px);transition:all .22s ease}
 #backToTop.visible{opacity:1;transform:none}
 
-.site-footer{padding:20px 18px;text-align:center;color:#6e1b4d;background:#fff;border-top:1px solid #ffe6f0;margin-top:36px}
+.site-footer{padding:20px 18px;text-align:center;color:#f960bc;background:#fff;border-top:1px solid #ffe6f0;margin-top:36px; font-family: 'Mountains of Christmas', serif;font-weight: 400;}
 
 /* small screens */
 @media (max-width:540px){
